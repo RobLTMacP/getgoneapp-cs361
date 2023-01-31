@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Get Gone!</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <h1 style="text-align: center;">Get Gone!</h1>
+    <h2 style="text-align: center;">making travel simpler</h1>
+    {% if tasks|length < 1 %}
+    <h4 style="text-align: center;">There are no current travel plans in place</h4>
+    {% else %}
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{msg}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <table>
+        <caption>Travel Destinations & Dates</caption>
+        <tr>
+            <th>Trip Destination</th>
+            <th>Date Planned</th>
+            <th>Date Added</th>
+            <th>Actions</th>
+        </tr>
+        {% for task in tasks %}
+            <tr>
+                <td class="cell-highlight">{{ task.content }}</td>
+                <td>{{ task.date_created.date() }}</td>
+                <td>{{ task.date_created.date() }}</td>
+                <td>
+                    <a href="/delete/{{task.id}}">Delete</a>
+                    <br>
+                    <a href="/update/{{task.id}}">Update</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    <form action="/" method="POST" onsubmit="return confirm('Are you sure you want to add this trip?');">
+        <input type="text" name="content" id="content">
+        <input type="submit" value="add new trip">
+    </form>
+
+</div>
+{% endblock %}
